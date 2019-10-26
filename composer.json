@@ -13,7 +13,7 @@
     ],
     "require": {
         "php": ">=7.2",
-        "psr/log": "^1.1@dev"
+        "psr/log": "^1.1"
     },
 
     "require-dev": {
@@ -29,10 +29,5 @@
             "Phore\\Test\\Di\\": "test/Di"
         }
     },
-    "minimum-stability": "dev",
-    "extra": {
-        "branch-alias": {
-            "dev-master": "0.1-dev"
-        }
-    }
+    "minimum-stability": "dev"
 }
