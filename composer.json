@@ -1,0 +1,38 @@
+{
+    "name": "phore/sock-server",
+    "type": "library",
+    "description": "Listening UDP Socket server for Syslog",
+    "keywords": ["Phore"],
+    "homepage": "https://infracamp.com/phore",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Matthias Leuffen",
+            "email": "matthes@leuffen.de"
+        }
+    ],
+    "require": {
+        "php": ">=7.2",
+        "psr/log": "^1.1@dev"
+    },
+
+    "require-dev": {
+        "phpunit/phpunit": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Phore\\SockServer\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Phore\\Test\\Di\\": "test/Di"
+        }
+    },
+    "minimum-stability": "dev",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.1-dev"
+        }
+    }
+}
