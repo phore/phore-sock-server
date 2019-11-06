@@ -11,6 +11,8 @@ namespace Phore\SockServer\Processor;
 
 
 use Phore\SockServer\SocketServerProcessor;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 
 
 /**
@@ -25,6 +27,18 @@ abstract class AbstractSyslogProcessor implements SocketServerProcessor
 {
 
     protected $buffer = [];
+
+    /**
+     * @var Logger
+     */
+    protected $logger;
+    
+    public function __construct(LoggerInterface $logger = null)
+    {
+        if ($logger === null)
+            $logger = new NullLogger();
+        $this->logger = $logger;
+    }
 
 
     /**
@@ -45,10 +59,12 @@ abstract class AbstractSyslogProcessor implements SocketServerProcessor
 
     public function injectStringMessage($senderIp, $senderPort, string $message) : bool
     {
-        if (substr($message, 0, 1) === "<")
+        if (substr($message, 0, 1) !== "<") {
             return false;
-        if (($posx = strpos($message, ">")) === false)
+        }
+        if (($posx = strpos($message, ">")) === false) {
             return false;
+        }
 
         $data = [
             "timestamp" => microtime(true),
@@ -74,8 +90,9 @@ abstract class AbstractSyslogProcessor implements SocketServerProcessor
 
         $messageFiltered = $this->filterMessage(substr($message, $msgStartIndex+2));
 
-        if ($messageFiltered === false)
+        if ($messageFiltered === false || $messageFiltered === null) {
             return false;
+        }
         $data["message"] = $messageFiltered;
         $this->buffer[] = $data;
         return true;
