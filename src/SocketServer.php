@@ -54,6 +54,14 @@ class SocketServer
         $this->mSock = $sock;
     }
 
+    /**
+     *
+     * When multiple processors are used, the first processor to return true
+     * will indicate processing was done and block the message from beeing received
+     * by other processors
+     *
+     * @param SocketServerProcessor $processor
+     */
     public function addProcessor (SocketServerProcessor $processor) {
         $this->mProcessors[] = $processor;
     }
@@ -71,8 +79,10 @@ class SocketServer
         $this->log->debug("New Message from $remoteIp: $message");
         $accepted = false;
         foreach ($this->mProcessors as $processor) {
-            if ($processor->injectStringMessage($remoteIp, $remotePort, $message))
+            if ($processor->injectStringMessage($remoteIp, $remotePort, $message)) {
                 $accepted = true;
+                break;
+            }
         }
 
         if ( ! $accepted)
